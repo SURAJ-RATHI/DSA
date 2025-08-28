@@ -1,63 +1,80 @@
 # 📘 Striver A2Z DSA Sheet – Solutions (C++)
 
-This repository contains my notes + C++ solutions for **Striver's A2Z DSA Sheet**.  
-Each problem includes:  
-✅ Intuition  
-✅ Brute / Better / Optimal Approaches  
-✅ Edge Cases  
-✅ Code snippets  
+This repository contains my solutions for **Striver's A2Z DSA Sheet**.
 
 ---
 
-## 📑 Table of Contents  
-- [Day 01 – Find the Largest Element in an Array](#-day-01--find-the-largest-element-in-an-array)  
-- [Day 02 – Remove Outermost Parentheses](#-day-02--remove-outermost-parentheses)  
-(Will keep updating…)
+## 📑 Table of Contents
+- [Question 1: Find the Largest Element in an Array](#question-1-find-the-largest-element-in-an-array)
 
 ---
 
-## 📂 Day 01 – Find the Largest Element in an Array  
-**URL:** [Take U Forward](https://takeuforward.org/data-structure/find-the-largest-element-in-an-array/)
+## Day 01
 
-### 💡 Intuition  
-The largest element is simply the maximum among all array elements.  
-We can track it while scanning linearly.
+### Question 1: Find the Largest Element in an Array
+**Link:** [Striver Link](https://takeuforward.org/data-structure/find-the-largest-element-in-an-array/)
 
----
-
-### 🟠 Brute Force  
-- Sort the array and return the last element.  
-- **Time Complexity:** `O(n log n)`  
-- **Space Complexity:** `O(1)`  
-
-```cpp
-int findLargestBrute(vector<int>& arr) {
-    sort(arr.begin(), arr.end());
-    return arr.back();
-}
+**Example:**
 ```
-### 🟠 Better Solution  
-- Sort the array and return the last element.  
-- **Time Complexity:** `O(n log n)`  
-- **Space Complexity:** `O(1)`  
-
-```cpp
-int findLargestBrute(vector<int>& arr) {
-    sort(arr.begin(), arr.end());
-    return arr.back();
-}
+Input: arr[] = {2, 5, 1, 3, 0}
+Output: 5
 ```
 
-### 🟠 Optimal Solution 
-- Sort the array and return the last element.  
-- **Time Complexity:** `O(n log n)`  
-- **Space Complexity:** `O(1)`  
+**Intuition:**
+We need to find the maximum element in the array. We can iterate through the array and keep track of the largest element seen so far.
+
+**Brute Force:**
+Sort the array and return the last element (largest)
 
 ```cpp
-int findLargestBrute(vector<int>& arr) {
-    sort(arr.begin(), arr.end());
-    return arr.back();
-}
+class Solution {
+public:
+    int findLargest(vector<int>& arr) {
+        sort(arr.begin(), arr.end());
+        return arr.back();
+    }
+};
 ```
 
+**Better Solution:**
+Sort the array and return the last element (same as brute force but more efficient sorting)
 
+```cpp
+class Solution {
+public:
+    int findLargest(vector<int>& arr) {
+        sort(arr.begin(), arr.end());
+        return arr[arr.size() - 1];
+    }
+};
+```
+
+**Optimal Solution:**
+Linear scan through array keeping track of maximum element
+
+```cpp
+class Solution {
+public:
+    int findLargest(vector<int>& arr) {
+        int maxElement = arr[0];
+        for(int i = 1; i < arr.size(); i++) {
+            if(arr[i] > maxElement) {
+                maxElement = arr[i];
+            }
+        }
+        return maxElement;
+    }
+};
+```
+
+**Edge Cases:**
+- Empty array (handle with size check)
+- Single element array
+- All elements are same
+- Negative numbers
+
+**Important Notes:**
+- Time Complexity: Brute/Better - O(n log n), Optimal - O(n)
+- Space Complexity: All approaches - O(1)
+- Optimal solution is most efficient for this problem
+- Can also use max_element() function in C++ STL
