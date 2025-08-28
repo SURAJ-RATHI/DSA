@@ -1,4 +1,4 @@
-# 📘  DSA Revision Sheet + Solutions (C++)
+# 📘 Striver A2Z DSA Sheet – Solutions (C++)
 
 This repository contains my solutions for **Striver's A2Z DSA Sheet**.
 
@@ -10,6 +10,8 @@ This repository contains my solutions for **Striver's A2Z DSA Sheet**.
 - [Question 3: Check if an Array is Sorted](#question-3-check-if-an-array-is-sorted)
 - [Question 4: Rotate Array by K Elements](#question-4-rotate-array-by-k-elements)
 - [Question 5: Move All Zeros to the End of the Array](#question-5-move-all-zeros-to-the-end-of-the-array)
+- [Question 6: Union of Two Sorted Arrays](#question-6-union-of-two-sorted-arrays)
+- [Question 7: Find the Missing Number in an Array](#question-7-find-the-missing-number-in-an-array)
 
 ---
 
@@ -468,3 +470,249 @@ public:
 - Optimal solution modifies array in-place
 - Maintains relative order of non-zero elements
 - Can also use swap approach for in-place modification
+
+---
+
+### Question 6: Union of Two Sorted Arrays
+**Link:** [Striver Link](https://takeuforward.org/data-structure/union-of-two-sorted-arrays/)
+
+**Example:**
+```
+Input: arr1[] = {1, 2, 3, 4, 5}, arr2[] = {2, 3, 4, 4, 5}
+Output: {1, 2, 3, 4, 5} (union without duplicates)
+
+Input: arr1[] = {1, 1, 2, 3}, arr2[] = {2, 3, 4}
+Output: {1, 2, 3, 4} (union without duplicates)
+```
+
+**Intuition:**
+We need to find the union of two sorted arrays, which means combining all unique elements from both arrays. Since arrays are sorted, we can use two-pointer approach or merge approach.
+
+**Brute Force:**
+Use set to store all elements and convert back to vector
+
+```cpp
+class Solution {
+public:
+    vector<int> findUnion(int arr1[], int arr2[], int n, int m) {
+        set<int> unionSet;
+        
+        // Add elements from first array
+        for(int i = 0; i < n; i++) {
+            unionSet.insert(arr1[i]);
+        }
+        
+        // Add elements from second array
+        for(int i = 0; i < m; i++) {
+            unionSet.insert(arr2[i]);
+        }
+        
+        // Convert set to vector
+        vector<int> result(unionSet.begin(), unionSet.end());
+        return result;
+    }
+};
+```
+
+**Better Solution:**
+Merge approach using two pointers (since arrays are sorted)
+
+```cpp
+class Solution {
+public:
+    vector<int> findUnion(int arr1[], int arr2[], int n, int m) {
+        vector<int> result;
+        int i = 0, j = 0;
+        
+        while(i < n && j < m) {
+            if(arr1[i] < arr2[j]) {
+                if(result.empty() || result.back() != arr1[i]) {
+                    result.push_back(arr1[i]);
+                }
+                i++;
+            } else if(arr2[j] < arr1[i]) {
+                if(result.empty() || result.back() != arr2[j]) {
+                    result.push_back(arr2[j]);
+                }
+                j++;
+            } else {
+                if(result.empty() || result.back() != arr1[i]) {
+                    result.push_back(arr1[i]);
+                }
+                i++;
+                j++;
+            }
+        }
+        
+        // Add remaining elements from arr1
+        while(i < n) {
+            if(result.empty() || result.back() != arr1[i]) {
+                result.push_back(arr1[i]);
+            }
+            i++;
+        }
+        
+        // Add remaining elements from arr2
+        while(j < m) {
+            if(result.empty() || result.back() != arr2[j]) {
+                result.push_back(arr2[j]);
+            }
+            j++;
+        }
+        
+        return result;
+    }
+};
+```
+
+**Optimal Solution:**
+Two-pointer merge approach with duplicate handling
+
+```cpp
+class Solution {
+public:
+    vector<int> findUnion(int arr1[], int arr2[], int n, int m) {
+        vector<int> result;
+        int i = 0, j = 0;
+        
+        while(i < n && j < m) {
+            if(arr1[i] <= arr2[j]) {
+                if(result.empty() || result.back() != arr1[i]) {
+                    result.push_back(arr1[i]);
+                }
+                i++;
+            } else {
+                if(result.empty() || result.back() != arr2[j]) {
+                    result.push_back(arr2[j]);
+                }
+                j++;
+            }
+        }
+        
+        // Add remaining elements from arr1
+        while(i < n) {
+            if(result.empty() || result.back() != arr1[i]) {
+                result.push_back(arr1[i]);
+            }
+            i++;
+        }
+        
+        // Add remaining elements from arr2
+        while(j < m) {
+            if(result.empty() || result.back() != arr2[j]) {
+                result.push_back(arr2[j]);
+            }
+            j++;
+        }
+        
+        return result;
+    }
+};
+```
+
+**Edge Cases:**
+- One or both arrays are empty
+- Arrays with all same elements
+- Arrays with no common elements
+- Arrays with all elements same
+- Arrays with different sizes
+
+**Important Notes:**
+- Time Complexity: Brute - O((n+m) log(n+m)), Better/Optimal - O(n+m)
+- Space Complexity: Brute - O(n+m), Better/Optimal - O(n+m) for result
+- Optimal solution leverages sorted nature of arrays
+- Always check for duplicates before adding to result
+- Can also use unordered_set for better average case performance
+
+---
+
+### Question 7: Find the Missing Number in an Array
+**Link:** [Striver Link](https://takeuforward.org/arrays/find-the-missing-number-in-an-array/)
+
+**Example:**
+```
+Input: arr[] = {3, 0, 1}
+Output: 2 (missing number between 0 and 3)
+
+Input: arr[] = {0, 1}
+Output: 2 (missing number between 0 and 2)
+
+Input: arr[] = {9, 6, 4, 2, 3, 5, 7, 0, 1}
+Output: 8 (missing number between 0 and 9)
+```
+
+**Intuition:**
+We need to find the missing number in an array containing numbers from 0 to n (where n is array length). We can use sum formula, XOR approach, or sorting approach.
+
+**Brute Force:**
+Sort the array and find the first missing number
+
+```cpp
+class Solution {
+public:
+    int missingNumber(vector<int>& arr) {
+        sort(arr.begin(), arr.end());
+        int n = arr.size();
+        
+        for(int i = 0; i < n; i++) {
+            if(arr[i] != i) {
+                return i;
+            }
+        }
+        return n; // If all numbers are present, return n
+    }
+};
+```
+
+**Better Solution:**
+Use sum formula - expected sum minus actual sum
+
+```cpp
+class Solution {
+public:
+    int missingNumber(vector<int>& arr) {
+        int n = arr.size();
+        int expectedSum = (n * (n + 1)) / 2;
+        int actualSum = 0;
+        
+        for(int i = 0; i < n; i++) {
+            actualSum += arr[i];
+        }
+        
+        return expectedSum - actualSum;
+    }
+};
+```
+
+**Optimal Solution:**
+XOR approach - XOR all numbers from 0 to n with array elements
+
+```cpp
+class Solution {
+public:
+    int missingNumber(vector<int>& arr) {
+        int n = arr.size();
+        int result = n; // Start with n
+        
+        for(int i = 0; i < n; i++) {
+            result ^= i ^ arr[i];
+        }
+        
+        return result;
+    }
+};
+```
+
+**Edge Cases:**
+- Array with single element
+- Array with all numbers present (missing is n)
+- Array with first number missing (0)
+- Array with last number missing (n-1)
+- Empty array
+
+**Important Notes:**
+- Time Complexity: Brute - O(n log n), Better - O(n), Optimal - O(n)
+- Space Complexity: All approaches - O(1)
+- Sum formula approach is simple and efficient
+- XOR approach handles integer overflow better than sum
+- Can also use hash set approach for O(n) time and space
