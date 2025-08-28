@@ -1,4 +1,4 @@
-# 📘 Striver A2Z DSA Sheet – Solutions (C++)
+# 📘 DSA Revision Sheet (C++)
 
 This repository contains my solutions for **Striver's A2Z DSA Sheet**.
 
