@@ -35,3 +35,15 @@ int findLargestBrute(vector<int>& arr) {
     sort(arr.begin(), arr.end());
     return arr.back();
 }
+```
+### 🟠 Brute Force  
+- Sort the array and return the last element.  
+- **Time Complexity:** `O(n log n)`  
+- **Space Complexity:** `O(1)`  
+
+```cpp
+int findLargestBrute(vector<int>& arr) {
+    sort(arr.begin(), arr.end());
+    return arr.back();
+}
+```
