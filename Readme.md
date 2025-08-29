@@ -716,3 +716,193 @@ public:
 - Sum formula approach is simple and efficient
 - XOR approach handles integer overflow better than sum
 - Can also use hash set approach for O(n) time and space
+
+---
+
+### Question 8: Count Maximum Consecutive Ones in the Array
+**Link:** [Striver Link](https://takeuforward.org/data-structure/count-maximum-consecutive-ones-in-the-array/)
+
+**Example:**
+```
+Input: arr[] = {1, 1, 0, 1, 1, 1}
+Output: 3 (maximum consecutive ones)
+
+Input: arr[] = {1, 0, 1, 1, 0, 1}
+Output: 2 (maximum consecutive ones)
+
+Input: arr[] = {0, 0, 0, 0}
+Output: 0 (no ones present)
+```
+
+**Intuition:**
+We need to find the maximum count of consecutive 1s in a binary array. We can iterate through the array and keep track of current consecutive count and maximum count seen so far.
+
+**Brute Force:**
+Check all possible subarrays and count consecutive ones
+
+```cpp
+class Solution {
+public:
+    int findMaxConsecutiveOnes(vector<int>& arr) {
+        int n = arr.size();
+        int maxCount = 0;
+        
+        for(int i = 0; i < n; i++) {
+            if(arr[i] == 1) {
+                int count = 0;
+                int j = i;
+                while(j < n && arr[j] == 1) {
+                    count++;
+                    j++;
+                }
+                maxCount = max(maxCount, count);
+                i = j - 1; // Skip the ones we already counted
+            }
+        }
+        
+        return maxCount;
+    }
+};
+```
+
+**Optimal Solution:**
+Single pass with counter variables
+
+```cpp
+class Solution {
+public:
+    int findMaxConsecutiveOnes(vector<int>& arr) {
+        int n = arr.size();
+        int maxCount = 0;
+        int currentCount = 0;
+        
+        for(int i = 0; i < n; i++) {
+            if(arr[i] == 1) {
+                currentCount++;
+                maxCount = max(maxCount, currentCount);
+            } else {
+                currentCount = 0;
+            }
+        }
+        
+        return maxCount;
+    }
+};
+```
+
+**Edge Cases:**
+- Array with all zeros
+- Array with all ones
+- Array with single element
+- Array with alternating zeros and ones
+- Empty array
+
+**Important Notes:**
+- Time Complexity: Brute - O(n²), Optimal - O(n)
+- Space Complexity: All approaches - O(1)
+- Optimal solution uses single pass with two counters
+- Reset currentCount to 0 when encountering 0
+- Update maxCount whenever currentCount increases
+
+---
+
+### Question 9: Find the Number that Appears Once and the Other Numbers Twice
+**Link:** [Striver Link](https://takeuforward.org/arrays/find-the-number-that-appears-once-and-the-other-numbers-twice/)
+
+**Example:**
+```
+Input: arr[] = {4, 1, 2, 1, 2}
+Output: 4 (appears once, others appear twice)
+
+Input: arr[] = {2, 2, 1}
+Output: 1 (appears once, others appear twice)
+
+Input: arr[] = {1}
+Output: 1 (single element)
+```
+
+**Intuition:**
+We need to find the element that appears only once in an array where all other elements appear exactly twice. We can use XOR operation since XOR of a number with itself gives 0, and XOR with 0 gives the number itself.
+
+**Brute Force:**
+Use nested loops to count frequency of each element
+
+```cpp
+class Solution {
+public:
+    int singleNumber(vector<int>& arr) {
+        int n = arr.size();
+        
+        for(int i = 0; i < n; i++) {
+            int count = 0;
+            for(int j = 0; j < n; j++) {
+                if(arr[i] == arr[j]) {
+                    count++;
+                }
+            }
+            if(count == 1) {
+                return arr[i];
+            }
+        }
+        
+        return -1; // Should not reach here
+    }
+};
+```
+
+**Better Solution:**
+Use hash map to count frequency
+
+```cpp
+class Solution {
+public:
+    int singleNumber(vector<int>& arr) {
+        int n = arr.size();
+        unordered_map<int, int> freq;
+        
+        for(int i = 0; i < n; i++) {
+            freq[arr[i]]++;
+        }
+        
+        for(auto it : freq) {
+            if(it.second == 1) {
+                return it.first;
+            }
+        }
+        
+        return -1;
+    }
+};
+```
+
+**Optimal Solution:**
+XOR approach - XOR all elements
+
+```cpp
+class Solution {
+public:
+    int singleNumber(vector<int>& arr) {
+        int n = arr.size();
+        int result = 0;
+        
+        for(int i = 0; i < n; i++) {
+            result ^= arr[i];
+        }
+        
+        return result;
+    }
+};
+```
+
+**Edge Cases:**
+- Array with single element
+- Array with all elements appearing twice (should not occur)
+- Array with negative numbers
+- Array with zeros
+
+**Important Notes:**
+- Time Complexity: Brute - O(n²), Better - O(n), Optimal - O(n)
+- Space Complexity: Brute - O(1), Better - O(n), Optimal - O(1)
+- XOR approach is most efficient in both time and space
+- XOR properties: a^a = 0, a^0 = a, a^b^a = b
+- Works because pairs of same numbers cancel out (become 0)
