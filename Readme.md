@@ -906,3 +906,108 @@ public:
 - XOR approach is most efficient in both time and space
 - XOR properties: a^a = 0, a^0 = a, a^b^a = b
 - Works because pairs of same numbers cancel out (become 0)
+
+---
+
+### Question 10: Longest Subarray with Given Sum K
+**Link:** [Striver Link](https://takeuforward.org/data-structure/longest-subarray-with-given-sum-k/)
+
+**Example:**
+```
+Input: arr[] = {1, 2, 3, 1, 1, 1, 1}, K = 3
+Output: 3 (subarray {1, 1, 1} has sum 3)
+
+Input: arr[] = {2, 3, 5, 1, 9}, K = 10
+Output: 3 (subarray {2, 3, 5} has sum 10)
+
+Input: arr[] = {1, 4, 20, 3, 10, 5}, K = 33
+Output: 3 (subarray {20, 3, 10} has sum 33)
+```
+
+**Intuition:**
+We need to find the longest subarray whose sum equals K. For positive-only arrays, we can use sliding window. For arrays with negative numbers, we need to use prefix sum with hash map.
+
+**Case 1: Only Positive Numbers (Sliding Window)**
+
+```cpp
+class Solution {
+public:
+    int lenOfLongSubarr(vector<int>& arr, int K) {
+        int n = arr.size();
+        int left = 0, right = 0;
+        int sum = 0;
+        int maxLen = 0;
+        
+        while(right < n) {
+            sum += arr[right];
+            
+            while(sum > K && left <= right) {
+                sum -= arr[left];
+                left++;
+            }
+            
+            if(sum == K) {
+                maxLen = max(maxLen, right - left + 1);
+            }
+            
+            right++;
+        }
+        
+        return maxLen;
+    }
+};
+```
+
+**Case 2: Positive + Negative Numbers (Prefix Sum + Hash Map)**
+
+```cpp
+class Solution {
+public:
+    int lenOfLongSubarr(vector<int>& arr, int K) {
+        int n = arr.size();
+        unordered_map<int, int> prefixSum;
+        int sum = 0;
+        int maxLen = 0;
+        
+        for(int i = 0; i < n; i++) {
+            sum += arr[i];
+            
+            if(sum == K) {
+                maxLen = max(maxLen, i + 1);
+            }
+            
+            if(prefixSum.find(sum - K) != prefixSum.end()) {
+                maxLen = max(maxLen, i - prefixSum[sum - K]);
+            }
+            
+            if(prefixSum.find(sum) == prefixSum.end()) {
+                prefixSum[sum] = i;
+            }
+        }
+        
+        return maxLen;
+    }
+};
+```
+
+**Edge Cases:**
+- Array with single element
+- Array with all zeros
+- Array with target sum K = 0
+- Array with no valid subarray
+- Empty array
+
+**Important Notes:**
+- **Positive-only arrays**: Use sliding window approach
+  - Time Complexity: O(n), Space Complexity: O(1)
+  - Shrink window when sum > K
+  - Update maxLen when sum == K
+  
+- **Arrays with negative numbers**: Use prefix sum + hash map
+  - Time Complexity: O(n), Space Complexity: O(n)
+  - Store prefix sums in hash map
+  - Look for (sum - K) in hash map
+  - Only store first occurrence of each prefix sum
+  
+- Sliding window works for positive numbers because sum increases monotonically
+- Hash map approach handles negative numbers by tracking all possible prefix sums
