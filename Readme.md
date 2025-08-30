@@ -21,6 +21,7 @@ This repository contains my solutions for **Striver's A2Z DSA Sheet**.
 - [Question 14: Kadane's Algorithm - Maximum Subarray Sum in an Array](#question-14-kadanes-algorithm-maximum-subarray-sum-in-an-array)
 - [Question 15: Stock Buy and Sell](#question-15-stock-buy-and-sell)
 - [Question 16: Next Permutation - Find Next Lexicographically Greater Permutation](#question-16-next-permutation-find-next-lexicographically-greater-permutation)
+- [Question 17: Longest Consecutive Sequence in an Array](#question-17-longest-consecutive-sequence-in-an-array)
 
 ---
 
@@ -1755,3 +1756,131 @@ public:
 - Reverse entire array to get first permutation
 - Can also implement previous permutation by reversing the logic
 - Works for any array with distinct or duplicate elements
+
+---
+
+### Question 17: Longest Consecutive Sequence in an Array
+**Link:** [Striver Link](https://takeuforward.org/data-structure/longest-consecutive-sequence-in-an-array/)
+
+**Example:**
+```
+Input: arr[] = {100, 4, 200, 1, 3, 2}
+Output: 4 (longest consecutive sequence: {1, 2, 3, 4})
+
+Input: arr[] = {0, 3, 7, 2, 5, 8, 4, 6, 0, 1}
+Output: 9 (longest consecutive sequence: {0, 1, 2, 3, 4, 5, 6, 7, 8})
+
+Input: arr[] = {1, 2, 0, 1}
+Output: 3 (longest consecutive sequence: {0, 1, 2})
+```
+
+**Intuition:**
+We need to find the longest sequence of consecutive numbers in the array. The key insight is to use a hash set to check if consecutive elements exist, and only start counting from the smallest element of each sequence.
+
+**Brute Force:**
+Check all possible sequences starting from each element
+
+```cpp
+class Solution {
+public:
+    int longestConsecutive(vector<int>& arr) {
+        int n = arr.size();
+        int maxLength = 0;
+        
+        for(int i = 0; i < n; i++) {
+            int currentNum = arr[i];
+            int currentLength = 1;
+            
+            // Check forward sequence
+            while(find(arr.begin(), arr.end(), currentNum + 1) != arr.end()) {
+                currentNum++;
+                currentLength++;
+            }
+            
+            maxLength = max(maxLength, currentLength);
+        }
+        
+        return maxLength;
+    }
+};
+```
+
+**Better Solution:**
+Sort and find consecutive sequences
+
+```cpp
+class Solution {
+public:
+    int longestConsecutive(vector<int>& arr) {
+        if(arr.empty()) return 0;
+        
+        sort(arr.begin(), arr.end());
+        int n = arr.size();
+        int maxLength = 1;
+        int currentLength = 1;
+        
+        for(int i = 1; i < n; i++) {
+            if(arr[i] == arr[i-1] + 1) {
+                currentLength++;
+            } else if(arr[i] != arr[i-1]) {
+                currentLength = 1;
+            }
+            maxLength = max(maxLength, currentLength);
+        }
+        
+        return maxLength;
+    }
+};
+```
+
+**Optimal Solution:**
+Hash set approach
+
+```cpp
+class Solution {
+public:
+    int longestConsecutive(vector<int>& arr) {
+        int n = arr.size();
+        if(n == 0) return 0;
+        
+        unordered_set<int> numSet(arr.begin(), arr.end());
+        int maxLength = 0;
+        
+        for(int num : numSet) {
+            // Only start counting if this is the start of a sequence
+            if(numSet.find(num - 1) == numSet.end()) {
+                int currentNum = num;
+                int currentLength = 1;
+                
+                // Count consecutive elements forward
+                while(numSet.find(currentNum + 1) != numSet.end()) {
+                    currentNum++;
+                    currentLength++;
+                }
+                
+                maxLength = max(maxLength, currentLength);
+            }
+        }
+        
+        return maxLength;
+    }
+};
+```
+
+**Edge Cases:**
+- Array with single element
+- Array with all same elements
+- Array with no consecutive elements
+- Array with negative numbers
+- Empty array
+- Array with duplicates
+
+**Important Notes:**
+- Time Complexity: Brute - O(n³), Better - O(n log n), Optimal - O(n)
+- Space Complexity: Brute - O(1), Better - O(1), Optimal - O(n)
+- Key insight: Only start counting from smallest element of each sequence
+- Hash set approach avoids checking sequences multiple times
+- Sorting approach is simpler but less efficient
+- Duplicate elements don't affect the result
+- Can handle negative numbers and large ranges
+- Each element is processed at most twice in optimal solution
