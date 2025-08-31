@@ -22,6 +22,8 @@ This repository contains my solutions for **Striver's A2Z DSA Sheet**.
 - [Question 15: Stock Buy and Sell](#question-15-stock-buy-and-sell)
 - [Question 16: Next Permutation - Find Next Lexicographically Greater Permutation](#question-16-next-permutation-find-next-lexicographically-greater-permutation)
 - [Question 17: Longest Consecutive Sequence in an Array](#question-17-longest-consecutive-sequence-in-an-array)
+- [Question 18: Spiral Traversal of Matrix](#spiral-traversal-of-matrix)
+- [Question 19: Count Subarray Sum Equals K](#count-subarray-sum-equals-k)
 
 ---
 
@@ -1884,3 +1886,345 @@ public:
 - Duplicate elements don't affect the result
 - Can handle negative numbers and large ranges
 - Each element is processed at most twice in optimal solution
+
+---
+
+## Spiral Traversal of Matrix
+
+**Link:** [TakeUForward - Spiral Traversal of Matrix](https://takeuforward.org/data-structure/spiral-traversal-of-matrix/)
+
+**Problem Statement:**
+Given a 2D matrix, print all elements in a spiral order.
+
+**Example:**
+```
+Input: matrix = [
+    [1, 2, 3, 4],
+    [5, 6, 7, 8],
+    [9, 10, 11, 12]
+]
+Output: [1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7]
+```
+
+**Intuition:**
+We need to traverse the matrix in a spiral pattern: right → down → left → up, while keeping track of boundaries and avoiding revisiting elements.
+
+**Approach 1: Using 4 Pointers (Optimal)**
+```cpp
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int> result;
+        if(matrix.empty() || matrix[0].empty()) return result;
+        
+        int rows = matrix.size();
+        int cols = matrix[0].size();
+        
+        int top = 0, bottom = rows - 1;
+        int left = 0, right = cols - 1;
+        
+        while(top <= bottom && left <= right) {
+            // Traverse right
+            for(int j = left; j <= right; j++) {
+                result.push_back(matrix[top][j]);
+            }
+            top++;
+            
+            // Traverse down
+            for(int i = top; i <= bottom; i++) {
+                result.push_back(matrix[i][right]);
+            }
+            right--;
+            
+            // Traverse left (only if top <= bottom)
+            if(top <= bottom) {
+                for(int j = right; j >= left; j--) {
+                    result.push_back(matrix[bottom][j]);
+                }
+                bottom--;
+            }
+            
+            // Traverse up (only if left <= right)
+            if(left <= right) {
+                for(int i = bottom; i >= top; i--) {
+                    result.push_back(matrix[i][left]);
+                }
+                left++;
+            }
+        }
+        
+        return result;
+    }
+};
+```
+
+**Approach 2: Using Direction Array (Alternative)**
+```cpp
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int> result;
+        if(matrix.empty() || matrix[0].empty()) return result;
+        
+        int rows = matrix.size();
+        int cols = matrix[0].size();
+        
+        // Direction arrays: right, down, left, up
+        int dr[] = {0, 1, 0, -1};
+        int dc[] = {1, 0, -1, 0};
+        
+        int r = 0, c = 0;
+        int direction = 0;
+        int visited = 0;
+        int total = rows * cols;
+        
+        while(visited < total) {
+            result.push_back(matrix[r][c]);
+            visited++;
+            
+            int nextR = r + dr[direction];
+            int nextC = c + dc[direction];
+            
+            // Check if next position is valid and not visited
+            if(nextR < 0 || nextR >= rows || nextC < 0 || nextC >= cols || 
+               matrix[nextR][nextC] == INT_MAX) {
+                direction = (direction + 1) % 4;
+                nextR = r + dr[direction];
+                nextC = c + dc[direction];
+            }
+            
+            r = nextR;
+            c = nextC;
+        }
+        
+        return result;
+    }
+};
+```
+
+**Approach 3: Recursive Solution**
+```cpp
+class Solution {
+public:
+    void spiralTraversal(vector<vector<int>>& matrix, vector<int>& result, 
+                        int startRow, int endRow, int startCol, int endCol) {
+        if(startRow > endRow || startCol > endCol) return;
+        
+        // Traverse right
+        for(int j = startCol; j <= endCol; j++) {
+            result.push_back(matrix[startRow][j]);
+        }
+        
+        // Traverse down
+        for(int i = startRow + 1; i <= endRow; i++) {
+            result.push_back(matrix[i][endCol]);
+        }
+        
+        // Traverse left (only if startRow != endRow)
+        if(startRow != endRow) {
+            for(int j = endCol - 1; j >= startCol; j--) {
+                result.push_back(matrix[endRow][j]);
+            }
+        }
+        
+        // Traverse up (only if startCol != endCol)
+        if(startCol != endCol) {
+            for(int i = endRow - 1; i > startRow; i--) {
+                result.push_back(matrix[i][startCol]);
+            }
+        }
+        
+        // Recursive call for inner matrix
+        spiralTraversal(matrix, result, startRow + 1, endRow - 1, 
+                       startCol + 1, endCol - 1);
+    }
+    
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int> result;
+        if(matrix.empty() || matrix[0].empty()) return result;
+        
+        int rows = matrix.size();
+        int cols = matrix[0].size();
+        
+        spiralTraversal(matrix, result, 0, rows - 1, 0, cols - 1);
+        return result;
+    }
+};
+```
+
+**Edge Cases:**
+- Empty matrix
+- Single row or single column matrix
+- 1x1 matrix
+- Matrix with all same elements
+
+**Important Notes:**
+- **Time Complexity:** O(m × n) where m is rows and n is columns
+- **Space Complexity:** O(1) for Approach 1, O(m × n) for result array
+- Approach 1 (4 pointers) is most efficient and commonly used in interviews
+- Always check boundaries before traversing to avoid index out of bounds
+- The spiral pattern follows: right → down → left → up → repeat
+
+**Variations:**
+1. **Spiral Matrix II:** Generate a matrix with numbers 1 to n² in spiral order
+2. **Spiral Matrix III:** Start from a specific position and traverse in spiral order
+3. **Anti-clockwise spiral:** Change the direction order to: left → up → right → down
+
+**Practice Problems:**
+- [LeetCode 54: Spiral Matrix](https://leetcode.com/problems/spiral-matrix/)
+- [LeetCode 59: Spiral Matrix II](https://leetcode.com/problems/spiral-matrix-ii/)
+- [LeetCode 885: Spiral Matrix III](https://leetcode.com/problems/spiral-matrix-iii/)
+
+---
+
+## Count Subarray Sum Equals K
+
+**Link:** [TakeUForward - Count Subarray Sum Equals K](https://takeuforward.org/arrays/count-subarray-sum-equals-k/)
+
+**Problem Statement:**
+Given an array of integers and an integer k, return the total number of subarrays whose sum equals to k.
+
+**Example:**
+```
+Input: nums = [1, 1, 1], k = 2
+Output: 2
+Explanation: The subarrays [1, 1] and [1, 1] have sum 2.
+
+Input: nums = [1, 2, 3], k = 3
+Output: 2
+Explanation: The subarrays [1, 2] and [3] have sum 3.
+```
+
+**Intuition:**
+We need to find all subarrays whose sum equals k. The key insight is that if we have a prefix sum at index i, and we find a prefix sum at index j (where j < i) such that prefixSum[i] - prefixSum[j] = k, then the subarray from j+1 to i has sum k.
+
+**Approach 1: Brute Force (Not Recommended)**
+```cpp
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) {
+        int count = 0;
+        int n = nums.size();
+        
+        for(int start = 0; start < n; start++) {
+            int sum = 0;
+            for(int end = start; end < n; end++) {
+                sum += nums[end];
+                if(sum == k) {
+                    count++;
+                }
+            }
+        }
+        
+        return count;
+    }
+};
+```
+
+**Approach 2: Prefix Sum with Hash Map (Optimal)**
+```cpp
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) {
+        int count = 0;
+        int sum = 0;
+        unordered_map<int, int> prefixSum;
+        prefixSum[0] = 1; // Base case: empty subarray has sum 0
+        
+        for(int num : nums) {
+            sum += num;
+            
+            // If (sum - k) exists in map, we found subarrays with sum k
+            if(prefixSum.find(sum - k) != prefixSum.end()) {
+                count += prefixSum[sum - k];
+            }
+            
+            // Increment the count for current prefix sum
+            prefixSum[sum]++;
+        }
+        
+        return count;
+    }
+};
+```
+
+**Approach 3: Sliding Window (Only for Positive Numbers)**
+```cpp
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) {
+        // This approach only works for arrays with positive numbers
+        int count = 0;
+        int sum = 0;
+        int left = 0;
+        
+        for(int right = 0; right < nums.size(); right++) {
+            sum += nums[right];
+            
+            while(sum > k && left <= right) {
+                sum -= nums[left];
+                left++;
+            }
+            
+            if(sum == k) {
+                count++;
+            }
+        }
+        
+        return count;
+    }
+};
+```
+
+**Key Insights:**
+1. **Prefix Sum Concept:** If we have prefix sums, we can find subarray sums in O(1) time
+2. **Hash Map Usage:** We store prefix sums and their frequencies to handle negative numbers
+3. **Base Case:** We initialize prefixSum[0] = 1 because an empty subarray has sum 0
+4. **Formula:** If current prefix sum is S, we look for (S - k) in our map
+
+**Edge Cases:**
+- Empty array
+- Array with all negative numbers
+- Array with all positive numbers
+- k = 0 (special case)
+- Array with duplicate elements
+- Very large values causing overflow
+
+**Important Notes:**
+- **Time Complexity:** 
+  - Brute Force: O(n²)
+  - Hash Map: O(n)
+  - Sliding Window: O(n) (only for positive numbers)
+- **Space Complexity:** 
+  - Brute Force: O(1)
+  - Hash Map: O(n) in worst case
+  - Sliding Window: O(1)
+- Hash Map approach works for all cases (positive, negative, zero)
+- Sliding Window only works for positive numbers
+- Always consider integer overflow for large sums
+
+**Why Hash Map Approach is Optimal:**
+1. **Handles Negative Numbers:** Unlike sliding window, it works with negative values
+2. **Single Pass:** Only requires one iteration through the array
+3. **Efficient Lookup:** Hash map provides O(1) average time complexity for lookups
+4. **Handles Zero:** Correctly counts subarrays with sum k even when k = 0
+
+**Variations:**
+1. **Subarray Sum Divisible by K:** Use modulo arithmetic
+2. **Longest Subarray with Sum K:** Track indices instead of count
+3. **Subarray with Given XOR:** Similar concept but with XOR operation
+4. **Subarray with Given Product:** Handle multiplication and division
+
+**Practice Problems:**
+- [LeetCode 560: Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/)
+- [LeetCode 974: Subarray Sums Divisible by K](https://leetcode.com/problems/subarray-sums-divisible-by-k/)
+- [LeetCode 325: Maximum Size Subarray Sum Equals k](https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/)
+
+**Interview Tips:**
+- Always mention the hash map approach first
+- Explain why sliding window doesn't work for negative numbers
+- Discuss time and space complexity trade-offs
+- Be ready to handle edge cases like k = 0
+- Consider mentioning the prefix sum concept as it's fundamental
+
+---
