@@ -24,6 +24,7 @@ This repository contains my solutions for **Striver's A2Z DSA Sheet**.
 - [Question 17: Longest Consecutive Sequence in an Array](#question-17-longest-consecutive-sequence-in-an-array)
 - [Question 18: Spiral Traversal of Matrix](#spiral-traversal-of-matrix)
 - [Question 19: Count Subarray Sum Equals K](#count-subarray-sum-equals-k)
+- [Question 20: Pascal's Triangle](#pascals-triangle)
 
 ---
 
@@ -2226,5 +2227,155 @@ public:
 - Discuss time and space complexity trade-offs
 - Be ready to handle edge cases like k = 0
 - Consider mentioning the prefix sum concept as it's fundamental
+
+---
+
+## Pascal's Triangle
+
+**Link:** [TakeUForward - Program to Generate Pascal's Triangle](https://takeuforward.org/data-structure/program-to-generate-pascals-triangle/)
+
+**Problem Statement:**
+Given an integer numRows, return the first numRows of Pascal's triangle.
+
+**Example:**
+```
+Input: numRows = 5
+Output: [
+    [1],
+    [1, 1],
+    [1, 2, 1],
+    [1, 3, 3, 1],
+    [1, 4, 6, 4, 1]
+]
+```
+
+**Intuition:**
+Pascal's triangle is a triangular array where each number is the sum of the two numbers above it. Each row starts and ends with 1, and the middle numbers are calculated by adding the two numbers above them.
+
+**Approach 1: Using Previous Row (Standard)**
+```cpp
+class Solution {
+public:
+    vector<vector<int>> generate(int numRows) {
+        vector<vector<int>> result;
+        
+        for(int i = 0; i < numRows; i++) {
+            vector<int> row(i + 1, 1); // Initialize with 1s
+            
+            // Fill middle elements (not first and last)
+            for(int j = 1; j < i; j++) {
+                row[j] = result[i-1][j-1] + result[i-1][j];
+            }
+            
+            result.push_back(row);
+        }
+        
+        return result;
+    }
+};
+```
+
+**Approach 2: Using Combination Formula (Optimal)**
+```cpp
+class Solution {
+public:
+    vector<int> rowGenerate(int n) {
+        vector<int> temp;
+        long long ans = 1;
+        temp.push_back(ans);
+
+        for (int i = 0; i < n; i++) {
+            ans = ans * (n - i);
+            ans = ans / (i + 1);
+            temp.push_back(ans);
+        }
+
+        return temp;
+    }
+    
+    vector<vector<int>> generate(int numRows) {
+        vector<vector<int>> ans;
+        for (int i = 0; i < numRows; i++) {
+            ans.push_back(rowGenerate(i));
+        }
+        return ans;
+    }
+};
+```
+
+**Approach 3: Using Dynamic Programming (Alternative)**
+```cpp
+class Solution {
+public:
+    vector<vector<int>> generate(int numRows) {
+        vector<vector<int>> result;
+        
+        if(numRows == 0) return result;
+        
+        // First row
+        result.push_back({1});
+        
+        for(int i = 1; i < numRows; i++) {
+            vector<int> row;
+            row.push_back(1); // First element
+            
+            // Middle elements
+            for(int j = 1; j < i; j++) {
+                row.push_back(result[i-1][j-1] + result[i-1][j]);
+            }
+            
+            row.push_back(1); // Last element
+            result.push_back(row);
+        }
+        
+        return result;
+    }
+};
+```
+
+**Key Insights:**
+1. **Mathematical Pattern:** Each element is the sum of two elements from the previous row
+2. **Combination Formula:** The nth element in the rth row is C(r, n) = r!/(n!(r-n)!)
+3. **Boundary Elements:** First and last elements of each row are always 1
+4. **Row Length:** The ith row has (i+1) elements
+
+**Edge Cases:**
+- numRows = 0 (empty result)
+- numRows = 1 (single row with [1])
+- numRows = 2 (two rows: [1], [1,1])
+- Very large numRows (overflow considerations)
+
+**Important Notes:**
+- **Time Complexity:** 
+  - Approach 1 & 3: O(numRows²)
+  - Approach 2: O(numRows²) but more efficient for individual row generation
+- **Space Complexity:** O(numRows²) for storing the result
+- Approach 2 uses combination formula which is mathematically elegant
+- Always handle integer overflow for large values
+- Each row is symmetric (except for odd-length rows)
+
+**Why Combination Formula Approach is Optimal:**
+1. **Mathematical Efficiency:** Direct calculation without building previous rows
+2. **Memory Efficient:** Generates each row independently
+3. **Scalable:** Works well for generating specific rows without full triangle
+4. **Mathematical Insight:** Demonstrates understanding of binomial coefficients
+
+**Variations:**
+1. **Get Specific Row:** Generate only the nth row of Pascal's triangle
+2. **Get Specific Element:** Find the element at position (row, col)
+3. **Modified Pascal's Triangle:** Custom rules for element calculation
+4. **3D Pascal's Triangle:** Extension to higher dimensions
+
+**Practice Problems:**
+- [LeetCode 118: Pascal's Triangle](https://leetcode.com/problems/pascals-triangle/)
+- [LeetCode 119: Pascal's Triangle II](https://leetcode.com/problems/pascals-triangle-ii/)
+- [LeetCode 120: Triangle](https://leetcode.com/problems/triangle/)
+
+**Interview Tips:**
+- Start with the standard approach (building from previous row)
+- Mention the mathematical relationship with combinations
+- Discuss time and space complexity trade-offs
+- Be ready to handle edge cases like numRows = 0
+- Consider mentioning applications in probability and combinatorics
 
 ---
