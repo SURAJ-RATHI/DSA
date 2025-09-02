@@ -25,10 +25,21 @@ This repository contains my solutions for **Striver's A2Z DSA Sheet**.
 - [Question 18: Spiral Traversal of Matrix](#spiral-traversal-of-matrix)
 - [Question 19: Count Subarray Sum Equals K](#count-subarray-sum-equals-k)
 - [Question 20: Pascal's Triangle](#pascals-triangle)
+- [Question 21: Majority Elements (n/3) - Find Elements that Appear More than N/3 Times](#question-21-majority-elements-n3---find-elements-that-appear-more-than-n3-times)
+- [Question 22: 3-Sum - Find Triplets that Add Up to Zero](#question-22-3-sum---find-triplets-that-add-up-to-zero)
+- [Question 23: 4-Sum - Find Quads that Add Up to Target Value](#question-23-4-sum---find-quads-that-add-up-to-target-value)
+- [Question 24: Length of Longest Subarray with Zero Sum](#question-24-length-of-longest-subarray-with-zero-sum)
+- [Question 25: Count Subarrays with Given XOR K](#question-25-count-subarrays-with-given-xor-k)
+- [Question 26: Merge Overlapping Sub-intervals](#question-26-merge-overlapping-sub-intervals)
+- [Question 27: Count Reverse Pairs](#question-27-count-reverse-pairs)
+- [Question 28: Count Inversions in an Array](#question-28-count-inversions-in-an-array)
+- [Question 29: Maximum Product Subarray](#question-29-maximum-product-subarray)
+- [Question 30: Find the Repeating and Missing Numbers](#question-30-find-the-repeating-and-missing-numbers)
+- [Question 31: Merge Two Sorted Arrays Without Extra Space](#question-31-merge-two-sorted-arrays-without-extra-space)
 
 ---
 
-## Day 01
+
 
 ### Question 1: Find the Largest Element in an Array
 **Link:** [Striver Link](https://takeuforward.org/data-structure/find-the-largest-element-in-an-array/)
@@ -1025,6 +1036,11 @@ public:
 - Sliding window works for positive numbers because sum increases monotonically
 - Hash map approach handles negative numbers by tracking all possible prefix sums
 
+**Why Two Different Approaches:**
+1. **Sliding Window**: Works only for positive numbers because sum increases monotonically
+2. **Hash Map**: Works for all cases (positive, negative, zero) by tracking all prefix sums
+3. **Key Difference**: With negative numbers, sum can decrease, making sliding window ineffective
+
 ---
 
 ### Question 11: Two Sum - Check if a Pair with Given Sum Exists in Array
@@ -1238,7 +1254,7 @@ public:
 - Can also use Lomuto partition or Hoare partition variations
 
 **Algorithm / Intuition:**
-This problem is a variation of the popular Dutch National flag algorithm. 
+This problem is a variation of the popular Dutch National Flag algorithm. 
 
 This algorithm contains 3 pointers i.e. low, mid, and high, and 3 main rules. The rules are the following:
 
@@ -1301,6 +1317,15 @@ Final:   [0, 0, 1, 1, 2, 2]  (arr[mid] == 1, m++)
 ```
 
 In each iteration, if we check, the rules are always valid. This is how the algorithm works.
+
+**Key Insights:**
+1. **Three Regions**: The algorithm maintains three regions: 0s (left), 1s (middle), 2s (right)
+2. **Mid Pointer**: The mid pointer traverses the unsorted region
+3. **Swapping Strategy**: 
+   - 0 goes to left region (swap with low, increment both)
+   - 1 stays in middle region (just increment mid)
+   - 2 goes to right region (swap with high, decrement high)
+4. **Invariant**: After each iteration, the three regions maintain their properties
 
 ---
 
@@ -1531,6 +1556,18 @@ public:
 - Second implementation is more explicit about resetting
 - Can also track start and end indices of maximum subarray if needed
 
+**Why Kadane's Algorithm Works:**
+1. **Local vs Global Maximum**: At each step, we decide whether to extend the current subarray or start a new one
+2. **Negative Sum Reset**: If current sum becomes negative, starting fresh from current element gives better result
+3. **Optimal Substructure**: The solution to the problem can be constructed from solutions to subproblems
+4. **Greedy Choice**: At each step, we make the locally optimal choice (extend or reset)
+
+**Variations:**
+1. **Circular Subarray**: Handle cases where subarray can wrap around the array
+2. **K Maximum Subarrays**: Find k non-overlapping subarrays with maximum sum
+3. **Subarray with Given Sum**: Find subarray with exactly given sum (different from this problem)
+4. **Maximum Product Subarray**: Similar concept but with multiplication
+
 ---
 
 ### Question 15: Stock Buy and Sell
@@ -1636,6 +1673,24 @@ public:
 - First approach is most intuitive and commonly used
 - Second approach uses Kadane's concept on price differences
 - Can also track buy and sell days if needed
+
+**Why This Approach Works:**
+1. **Single Transaction**: Since we can only buy and sell once, we need to find the best buy-sell pair
+2. **Minimum Price Tracking**: By keeping track of minimum price seen so far, we ensure we buy at the lowest possible price
+3. **Greedy Strategy**: At each step, we calculate potential profit if we sell at current price
+4. **Optimal Substructure**: The solution can be built by considering each day as a potential selling day
+
+**Variations:**
+1. **Multiple Transactions**: Buy and sell multiple times to maximize profit
+2. **With Transaction Fee**: Each transaction has a cost
+3. **With Cooldown**: Cannot buy immediately after selling
+4. **Best Time to Buy and Sell Stock IV**: At most k transactions allowed
+
+**Interview Tips:**
+- Always mention the single transaction constraint first
+- Explain why tracking minimum price is optimal
+- Discuss the greedy nature of the algorithm
+- Be ready to handle edge cases like decreasing prices
 
 ---
 
@@ -1759,6 +1814,24 @@ public:
 - Reverse entire array to get first permutation
 - Can also implement previous permutation by reversing the logic
 - Works for any array with distinct or duplicate elements
+
+**Why This Algorithm Works:**
+1. **Lexicographic Order**: The algorithm finds the next permutation in lexicographic order
+2. **Break Point**: The first decreasing element from right is the point where we can make a change
+3. **Next Greater Element**: We swap with the smallest element greater than the break point
+4. **Suffix Reversal**: Reversing the suffix ensures we get the smallest possible arrangement
+
+**Key Insights:**
+1. **Monotonicity**: From right to left, elements are in descending order until the break point
+2. **Optimal Swap**: We swap with the smallest element that's greater than the break point
+3. **Suffix Property**: After the break point, all elements are in descending order
+4. **Minimal Change**: This approach ensures we get the next permutation with minimal change
+
+**Variations:**
+1. **Previous Permutation**: Find the previous lexicographically smaller permutation
+2. **Kth Permutation**: Find the kth permutation in lexicographic order
+3. **Permutation with Repetition**: Handle arrays with duplicate elements
+4. **Circular Permutations**: Handle circular arrangements
 
 ---
 
@@ -1888,9 +1961,29 @@ public:
 - Can handle negative numbers and large ranges
 - Each element is processed at most twice in optimal solution
 
+**Why Hash Set Approach is Optimal:**
+1. **Avoids Redundant Work**: We only start counting from the smallest element of each sequence
+2. **Efficient Lookup**: Hash set provides O(1) average time complexity for membership testing
+3. **Single Pass**: Each element is processed at most twice (once for checking if it's start, once for counting)
+4. **Handles Duplicates**: Duplicate elements don't affect the result
+
+**Key Insights:**
+1. **Sequence Start**: A number is the start of a sequence only if (num-1) is not in the set
+2. **Sequence Length**: Once we find a start, we count consecutive elements forward
+3. **No Overlapping**: Each sequence is counted only once from its start
+4. **Optimal Processing**: Each element is considered as potential sequence start at most once
+
+**Variations:**
+1. **Longest Consecutive Subsequence**: Find longest consecutive subsequence (elements need not be adjacent)
+2. **Consecutive Numbers with Sum K**: Find consecutive numbers that sum to K
+3. **Longest Arithmetic Subsequence**: Find longest arithmetic progression
+4. **Consecutive Characters**: Find longest consecutive characters in a string
+
 ---
 
-## Spiral Traversal of Matrix
+
+
+### Question 18: Spiral Traversal of Matrix
 
 **Link:** [TakeUForward - Spiral Traversal of Matrix](https://takeuforward.org/data-structure/spiral-traversal-of-matrix/)
 
@@ -2078,7 +2171,7 @@ public:
 
 ---
 
-## Count Subarray Sum Equals K
+### Question 19: Count Subarray Sum Equals K
 
 **Link:** [TakeUForward - Count Subarray Sum Equals K](https://takeuforward.org/arrays/count-subarray-sum-equals-k/)
 
@@ -2230,7 +2323,7 @@ public:
 
 ---
 
-## Pascal's Triangle
+### Question 20: Pascal's Triangle
 
 **Link:** [TakeUForward - Program to Generate Pascal's Triangle](https://takeuforward.org/data-structure/program-to-generate-pascals-triangle/)
 
@@ -2378,4 +2471,1341 @@ public:
 - Be ready to handle edge cases like numRows = 0
 - Consider mentioning applications in probability and combinatorics
 
+**Mathematical Applications:**
+1. **Binomial Coefficients**: Each element represents C(n, r) where n is row number and r is position
+2. **Probability**: Used in binomial probability distributions
+3. **Combinatorics**: Counts ways to choose r items from n items
+4. **Number Theory**: Related to triangular numbers and other sequences
+
+**Implementation Details:**
+1. **Integer Overflow**: Use long long for large values to avoid overflow
+2. **Row Generation**: Each row can be generated independently using combination formula
+3. **Symmetry**: Each row is symmetric (except for odd-length rows)
+4. **Base Cases**: First row is always [1], second row is always [1, 1]
+
 ---
+
+### Question 21: Majority Elements (n/3) - Find Elements that Appear More than N/3 Times
+
+**Link:** [TakeUForward - Majority Elements (n/3)](https://takeuforward.org/data-structure/majority-elementsn-3-times-find-the-elements-that-appears-more-than-n-3-times-in-the-array/)
+
+**Problem Statement:**
+Given an array of size n, find all elements that appear more than ⌊n/3⌋ times.
+
+**Example:**
+```
+Input: nums = [3,2,3]
+Output: [3]
+
+Input: nums = [1,1,1,3,3,2,2,2]
+Output: [1,2]
+```
+
+**Intuition:**
+At most 2 elements can appear more than n/3 times. We can use Boyer-Moore Voting Algorithm with 2 candidates.
+
+**Brute Force Approach:**
+Count frequency of each element using hash map
+
+```cpp
+class Solution {
+public:
+    vector<int> majorityElement(vector<int>& nums) {
+        vector<int> result;
+        unordered_map<int, int> count;
+        int n = nums.size();
+        int threshold = n / 3;
+        
+        // Count frequency of each element
+        for(int num : nums) {
+            count[num]++;
+        }
+        
+        // Check which elements appear more than n/3 times
+        for(auto& pair : count) {
+            if(pair.second > threshold) {
+                result.push_back(pair.first);
+            }
+        }
+        
+        return result;
+    }
+};
+```
+
+**Optimal Solution:**
+Boyer-Moore Voting Algorithm with 2 candidates
+
+```cpp
+class Solution {
+public:
+    vector<int> majorityElement(vector<int>& nums) {
+        vector<int> result;
+        int candidate1 = 0, candidate2 = 0;
+        int count1 = 0, count2 = 0;
+        
+        // First pass: Find 2 candidates
+        for(int num : nums) {
+            if(num == candidate1) {
+                count1++;
+            } else if(num == candidate2) {
+                count2++;
+            } else if(count1 == 0) {
+                candidate1 = num;
+                count1 = 1;
+            } else if(count2 == 0) {
+                candidate2 = num;
+                count2 = 1;
+            } else {
+                count1--;
+                count2--;
+            }
+        }
+        
+        // Second pass: Verify candidates
+        count1 = 0, count2 = 0;
+        for(int num : nums) {
+            if(num == candidate1) count1++;
+            else if(num == candidate2) count2++;
+        }
+        
+        int n = nums.size();
+        if(count1 > n/3) result.push_back(candidate1);
+        if(count2 > n/3) result.push_back(candidate2);
+        
+        return result;
+    }
+};
+```
+
+**Key Insights:**
+1. **Mathematical Limit**: At most 2 elements can appear more than n/3 times
+2. **Boyer-Moore Extension**: Extend the voting algorithm to track 2 candidates
+3. **Two-Pass Algorithm**: First pass finds candidates, second pass verifies
+4. **Counter Management**: Decrement both counters when encountering different element
+
+**Edge Cases:**
+- Array with less than 3 elements
+- All elements are same
+- No majority elements
+- Exactly 2 elements appearing n/3 times each
+
+**Important Notes:**
+- **Time Complexity**: O(n) - two linear passes
+- **Space Complexity**: O(1) - constant extra space
+- **Mathematical Proof**: At most 2 elements can have frequency > n/3
+- **Verification Step**: Always verify candidates in second pass
+
+**Why Boyer-Moore Voting Algorithm Works:**
+1. **Mathematical Guarantee**: Only 2 elements can appear > n/3 times
+2. **Counter Logic**: When we see a different element, we decrement both counters
+3. **Candidate Replacement**: When a counter reaches 0, we replace that candidate
+4. **Verification**: Final pass ensures we only return actual majority elements
+
+**Variations:**
+1. **Majority Element (n/2)**: Find element appearing more than n/2 times
+2. **Majority Element (n/k)**: Find elements appearing more than n/k times
+3. **K Majority Elements**: Find k elements with highest frequencies
+
+**Practice Problems:**
+- [LeetCode 229: Majority Element II](https://leetcode.com/problems/majority-element-ii/)
+- [LeetCode 169: Majority Element](https://leetcode.com/problems/majority-element/)
+
+**Interview Tips:**
+- Start with hash map approach for clarity
+- Explain the mathematical limit (at most 2 elements)
+- Demonstrate Boyer-Moore voting algorithm step by step
+- Always mention the verification step
+- Discuss time and space complexity trade-offs
+
+**Algorithm Breakdown:**
+1. **First Pass**: Find 2 potential candidates using voting algorithm
+2. **Second Pass**: Count actual frequency of candidates
+3. **Verification**: Return only candidates with frequency > n/3
+
+**Mathematical Foundation:**
+- If an element appears > n/3 times, it must be one of the candidates
+- The voting algorithm ensures we don't miss any majority elements
+- Verification step eliminates false positives
+
+---
+
+### Question 22: 3-Sum - Find Triplets that Add Up to Zero
+
+**Link:** [TakeUForward - 3-Sum](https://takeuforward.org/data-structure/3-sum-find-triplets-that-add-up-to-a-zero/)
+
+**Problem Statement:**
+Given an array of integers, find all unique triplets in the array which gives the sum of zero.
+
+**Example:**
+```
+Input: nums = [-1,0,1,2,-1,-4]
+Output: [[-1,-1,2],[-1,0,1]]
+
+Input: nums = []
+Output: []
+```
+
+**Intuition:**
+Use three pointers approach: fix one element and use two pointers to find the remaining two elements that sum to the negative of the fixed element.
+
+**Brute Force Approach:**
+Three nested loops to check all possible triplets
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> result;
+        int n = nums.size();
+        
+        // Sort array to handle duplicates
+        sort(nums.begin(), nums.end());
+        
+        for(int i = 0; i < n-2; i++) {
+            // Skip duplicates for i
+            if(i > 0 && nums[i] == nums[i-1]) continue;
+            
+            for(int j = i+1; j < n-1; j++) {
+                // Skip duplicates for j
+                if(j > i+1 && nums[j] == nums[j-1]) continue;
+                
+                for(int k = j+1; k < n; k++) {
+                    // Skip duplicates for k
+                    if(k > j+1 && nums[k] == nums[k-1]) continue;
+                    
+                    if(nums[i] + nums[j] + nums[k] == 0) {
+                        result.push_back({nums[i], nums[j], nums[k]});
+                    }
+                }
+            }
+        }
+        
+        return result;
+    }
+};
+```
+
+**Optimal Solution:**
+Two pointers approach with sorting
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> result;
+        int n = nums.size();
+        
+        if(n < 3) return result;
+        
+        // Sort array to use two pointers
+        sort(nums.begin(), nums.end());
+        
+        for(int i = 0; i < n-2; i++) {
+            // Skip duplicates for i
+            if(i > 0 && nums[i] == nums[i-1]) continue;
+            
+            int left = i + 1;
+            int right = n - 1;
+            int target = -nums[i];
+            
+            while(left < right) {
+                int sum = nums[left] + nums[right];
+                
+                if(sum == target) {
+                    result.push_back({nums[i], nums[left], nums[right]});
+                    
+                    // Skip duplicates for left
+                    while(left < right && nums[left] == nums[left+1]) left++;
+                    // Skip duplicates for right
+                    while(left < right && nums[right] == nums[right-1]) right--;
+                    
+                    left++;
+                    right--;
+                } else if(sum < target) {
+                    left++;
+                } else {
+                    right--;
+                }
+            }
+        }
+        
+        return result;
+    }
+};
+```
+
+**Key Insights:**
+1. **Sorting**: Essential for two pointers approach and duplicate handling
+2. **Duplicate Handling**: Skip duplicates at each level (i, left, right)
+3. **Two Pointers**: Use left and right pointers to find pairs efficiently
+4. **Target Calculation**: Target = -nums[i] for each fixed element
+
+**Edge Cases:**
+- Array with less than 3 elements
+- No valid triplets
+- All elements are same
+- Multiple valid triplets with duplicates
+
+**Important Notes:**
+- **Time Complexity**: O(n²) - sorting + two pointers
+- **Space Complexity**: O(1) - excluding result space
+- **Sorting**: Required for efficient two pointers approach
+- **Duplicate Handling**: Critical to avoid duplicate triplets
+
+**Why Two Pointers Approach Works:**
+1. **Sorted Array**: Allows efficient pair finding
+2. **Target Calculation**: For each nums[i], find pairs that sum to -nums[i]
+3. **Duplicate Skipping**: Ensures unique triplets only
+4. **Early Termination**: Can stop when left >= right
+
+**Variations:**
+1. **3-Sum Closest**: Find triplet with sum closest to target
+2. **3-Sum Smaller**: Count triplets with sum less than target
+3. **K-Sum**: Generalize to k elements summing to target
+
+**Practice Problems:**
+- [LeetCode 15: 3Sum](https://leetcode.com/problems/3sum/)
+- [LeetCode 16: 3Sum Closest](https://leetcode.com/problems/3sum-closest/)
+
+**Interview Tips:**
+- Start with brute force for clarity
+- Explain why sorting is necessary
+- Demonstrate two pointers approach step by step
+- Emphasize duplicate handling
+- Discuss time complexity trade-offs
+
+**Algorithm Breakdown:**
+1. **Sort**: Sort array for two pointers approach
+2. **Fix Element**: For each unique element nums[i]
+3. **Two Pointers**: Use left and right to find pairs
+4. **Duplicate Skip**: Skip duplicates at each level
+5. **Result Collection**: Add valid triplets to result
+
+**Mathematical Foundation:**
+- For each nums[i], we need nums[left] + nums[right] = -nums[i]
+- Sorting allows O(n) pair finding instead of O(n²)
+- Duplicate handling ensures unique solutions
+
+---
+
+### Question 23: 4-Sum - Find Quads that Add Up to Target Value
+
+**Link:** [TakeUForward - 4-Sum](https://takeuforward.org/data-structure/4-sum-find-quads-that-add-up-to-a-target-value/)
+
+**Problem Statement:**
+Given an array of integers and a target value, find all unique quadruplets in the array which gives the sum of target.
+
+**Example:**
+```
+Input: nums = [1,0,-1,0,-2,2], target = 0
+Output: [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
+
+Input: nums = [2,2,2,2,2], target = 8
+Output: [[2,2,2,2]]
+```
+
+**Intuition:**
+Extend 3-Sum approach: fix two elements and use two pointers to find the remaining two elements.
+
+**Brute Force Approach:**
+Four nested loops to check all possible quadruplets
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        vector<vector<int>> result;
+        int n = nums.size();
+        
+        if(n < 4) return result;
+        
+        // Sort array to handle duplicates
+        sort(nums.begin(), nums.end());
+        
+        for(int i = 0; i < n-3; i++) {
+            // Skip duplicates for i
+            if(i > 0 && nums[i] == nums[i-1]) continue;
+            
+            for(int j = i+1; j < n-2; j++) {
+                // Skip duplicates for j
+                if(j > i+1 && nums[j] == nums[j-1]) continue;
+                
+                for(int k = j+1; k < n-1; k++) {
+                    // Skip duplicates for k
+                    if(k > j+1 && nums[k] == nums[k-1]) continue;
+                    
+                    for(int l = k+1; l < n; l++) {
+                        // Skip duplicates for l
+                        if(l > k+1 && nums[l] == nums[l-1]) continue;
+                        
+                        if(nums[i] + nums[j] + nums[k] + nums[l] == target) {
+                            result.push_back({nums[i], nums[j], nums[k], nums[l]});
+                        }
+                    }
+                }
+            }
+        }
+        
+        return result;
+    }
+};
+```
+
+**Optimal Solution:**
+Two nested loops + two pointers approach
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        vector<vector<int>> result;
+        int n = nums.size();
+        
+        if(n < 4) return result;
+        
+        // Sort array to use two pointers
+        sort(nums.begin(), nums.end());
+        
+        for(int i = 0; i < n-3; i++) {
+            // Skip duplicates for i
+            if(i > 0 && nums[i] == nums[i-1]) continue;
+            
+            for(int j = i+1; j < n-2; j++) {
+                // Skip duplicates for j
+                if(j > i+1 && nums[j] == nums[j-1]) continue;
+                
+                int left = j + 1;
+                int right = n - 1;
+                long long targetSum = (long long)target - nums[i] - nums[j];
+                
+                while(left < right) {
+                    long long sum = (long long)nums[left] + nums[right];
+                    
+                    if(sum == targetSum) {
+                        result.push_back({nums[i], nums[j], nums[left], nums[right]});
+                        
+                        // Skip duplicates for left
+                        while(left < right && nums[left] == nums[left+1]) left++;
+                        // Skip duplicates for right
+                        while(left < right && nums[right] == nums[right-1]) right--;
+                        
+                        left++;
+                        right--;
+                    } else if(sum < targetSum) {
+                        left++;
+                    } else {
+                        right--;
+                    }
+                }
+            }
+        }
+        
+        return result;
+    }
+};
+```
+
+**Key Insights:**
+1. **Sorting**: Essential for two pointers approach and duplicate handling
+2. **Two Fixed Elements**: Fix i and j, then use two pointers for remaining pair
+3. **Overflow Handling**: Use long long to avoid integer overflow
+4. **Duplicate Handling**: Skip duplicates at each level (i, j, left, right)
+
+**Edge Cases:**
+- Array with less than 4 elements
+- No valid quadruplets
+- Integer overflow in sum calculations
+- Multiple valid quadruplets with duplicates
+
+**Important Notes:**
+- **Time Complexity**: O(n³) - two nested loops + two pointers
+- **Space Complexity**: O(1) - excluding result space
+- **Overflow Prevention**: Use long long for sum calculations
+- **Duplicate Handling**: Critical to avoid duplicate quadruplets
+
+**Why Two Pointers Approach Works:**
+1. **Sorted Array**: Allows efficient pair finding
+2. **Target Calculation**: For each nums[i] and nums[j], find pairs that sum to target - nums[i] - nums[j]
+3. **Duplicate Skipping**: Ensures unique quadruplets only
+4. **Overflow Handling**: Prevents integer overflow in large arrays
+
+**Variations:**
+1. **4-Sum Closest**: Find quadruplet with sum closest to target
+2. **K-Sum**: Generalize to k elements summing to target
+3. **4-Sum with Constraints**: Additional constraints on elements
+
+**Practice Problems:**
+- [LeetCode 18: 4Sum](https://leetcode.com/problems/4sum/)
+- [LeetCode 454: 4Sum II](https://leetcode.com/problems/4sum-ii/)
+
+**Interview Tips:**
+- Start with brute force for clarity
+- Explain the extension from 3-Sum
+- Emphasize overflow handling with long long
+- Demonstrate two pointers approach step by step
+- Discuss time complexity trade-offs
+
+**Algorithm Breakdown:**
+1. **Sort**: Sort array for two pointers approach
+2. **Fix Two Elements**: For each unique pair (nums[i], nums[j])
+3. **Two Pointers**: Use left and right to find remaining pair
+4. **Duplicate Skip**: Skip duplicates at each level
+5. **Overflow Handling**: Use long long for sum calculations
+6. **Result Collection**: Add valid quadruplets to result
+
+**Mathematical Foundation:**
+- For each nums[i] and nums[j], we need nums[left] + nums[right] = target - nums[i] - nums[j]
+- Sorting allows O(n) pair finding instead of O(n²)
+- Duplicate handling ensures unique solutions
+- Overflow handling prevents incorrect results
+
+---
+
+### Question 27: Count Reverse Pairs
+
+**Link:** [TakeUForward - Count Reverse Pairs](https://takeuforward.org/data-structure/count-reverse-pairs/)
+
+**Problem Statement:**
+Given an array of integers, count the number of reverse pairs. A reverse pair is a pair (i, j) where 0 <= i < j < n and nums[i] > 2 * nums[j].
+
+**Example:**
+```
+Input: nums = [1,3,2,3,1]
+Output: 2
+Explanation: The reverse pairs are (1,4) where nums[1] = 3 > 2 * nums[4] = 2, and (3,4) where nums[3] = 3 > 2 * nums[4] = 2.
+
+Input: nums = [2,4,3,5,1]
+Output: 3
+```
+
+**Intuition:**
+Use merge sort approach to count reverse pairs efficiently. During the merge step, count pairs where left element > 2 * right element.
+
+**Brute Force Approach:**
+Check all possible pairs
+
+```cpp
+class Solution {
+public:
+    int reversePairs(vector<int>& nums) {
+        int count = 0;
+        int n = nums.size();
+        
+        for(int i = 0; i < n; i++) {
+            for(int j = i + 1; j < n; j++) {
+                if(nums[i] > 2 * (long long)nums[j]) {
+                    count++;
+                }
+            }
+        }
+        
+        return count;
+    }
+};
+```
+
+**Optimal Solution:**
+Merge sort with reverse pair counting
+
+```cpp
+class Solution {
+public:
+    int reversePairs(vector<int>& nums) {
+        return mergeSort(nums, 0, nums.size() - 1);
+    }
+    
+private:
+    int mergeSort(vector<int>& nums, int start, int end) {
+        if(start >= end) return 0;
+        
+        int mid = start + (end - start) / 2;
+        int count = mergeSort(nums, start, mid) + mergeSort(nums, mid + 1, end);
+        
+        // Count reverse pairs
+        int j = mid + 1;
+        for(int i = start; i <= mid; i++) {
+            while(j <= end && nums[i] > 2 * (long long)nums[j]) {
+                j++;
+            }
+            count += j - (mid + 1);
+        }
+        
+        // Merge sorted arrays
+        merge(nums, start, mid, end);
+        
+        return count;
+    }
+    
+    void merge(vector<int>& nums, int start, int mid, int end) {
+        vector<int> temp(end - start + 1);
+        int i = start, j = mid + 1, k = 0;
+        
+        while(i <= mid && j <= end) {
+            if(nums[i] <= nums[j]) {
+                temp[k++] = nums[i++];
+            } else {
+                temp[k++] = nums[j++];
+            }
+        }
+        
+        while(i <= mid) temp[k++] = nums[i++];
+        while(j <= end) temp[k++] = nums[j++];
+        
+        for(int idx = 0; idx < k; idx++) {
+            nums[start + idx] = temp[idx];
+        }
+    }
+};
+```
+
+**Key Insights:**
+1. **Merge Sort**: Use divide and conquer approach
+2. **Reverse Pair Counting**: Count during merge step when left > 2 * right
+3. **Overflow Handling**: Use long long to prevent integer overflow
+4. **Two Pointers**: Use two pointers to count reverse pairs efficiently
+
+**Edge Cases:**
+- Array with no reverse pairs
+- Array with all same elements
+- Large numbers causing overflow
+- Single element array
+
+**Important Notes:**
+- **Time Complexity**: O(n log n) - merge sort complexity
+- **Space Complexity**: O(n) - temporary array for merging
+- **Overflow Prevention**: Use long long for multiplication
+- **Stable Sort**: Merge sort maintains relative order
+
+**Why Merge Sort Approach Works:**
+1. **Divide and Conquer**: Break problem into smaller subproblems
+2. **Sorted Subarrays**: After sorting, reverse pair counting becomes efficient
+3. **Two Pointers**: Use two pointers to count pairs in O(n) time
+4. **Recursive Solution**: Combine results from left and right halves
+
+**Variations:**
+1. **Count Inversions**: Count pairs where nums[i] > nums[j]
+2. **Count Pairs with Sum K**: Count pairs with given sum
+3. **Count Pairs with XOR K**: Count pairs with given XOR
+
+**Practice Problems:**
+- [LeetCode 493: Reverse Pairs](https://leetcode.com/problems/reverse-pairs/)
+- [LeetCode 315: Count of Smaller Numbers After Self](https://leetcode.com/problems/count-of-smaller-numbers-after-self/)
+
+**Interview Tips:**
+- Start with brute force for clarity
+- Explain merge sort approach step by step
+- Emphasize overflow handling with long long
+- Demonstrate reverse pair counting during merge
+- Discuss time and space complexity trade-offs
+
+**Algorithm Breakdown:**
+1. **Divide**: Split array into two halves
+2. **Conquer**: Recursively sort and count reverse pairs in each half
+3. **Count**: Count reverse pairs between left and right halves
+4. **Merge**: Merge sorted halves while maintaining count
+
+**Mathematical Foundation:**
+- Reverse pair condition: nums[i] > 2 * nums[j] where i < j
+- Merge sort ensures sorted subarrays for efficient counting
+- Two pointers approach counts pairs in O(n) time during merge
+
+---
+
+### Question 28: Count Inversions in an Array
+
+**Link:** [TakeUForward - Count Inversions](https://takeuforward.org/data-structure/count-inversions-in-an-array/)
+
+**Problem Statement:**
+Given an array of integers, count the number of inversions. An inversion is a pair (i, j) where 0 <= i < j < n and nums[i] > nums[j].
+
+**Example:**
+```
+Input: arr[] = {3, 1, 2}
+Output: 2
+Explanation: The inversions are (3,1) and (3,2).
+
+Input: arr[] = {2, 4, 1, 3, 5}
+Output: 3
+```
+
+**Intuition:**
+Use merge sort approach to count inversions efficiently. During the merge step, count pairs where left element > right element.
+
+**Brute Force Approach:**
+Check all possible pairs
+
+```cpp
+class Solution {
+public:
+    int countInversions(vector<int>& arr) {
+        int count = 0;
+        int n = arr.size();
+        
+        for(int i = 0; i < n; i++) {
+            for(int j = i + 1; j < n; j++) {
+                if(arr[i] > arr[j]) {
+                    count++;
+                }
+            }
+        }
+        
+        return count;
+    }
+};
+```
+
+**Optimal Solution:**
+Merge sort with inversion counting
+
+```cpp
+class Solution {
+public:
+    int countInversions(vector<int>& arr) {
+        return mergeSort(arr, 0, arr.size() - 1);
+    }
+    
+private:
+    int mergeSort(vector<int>& arr, int start, int end) {
+        if(start >= end) return 0;
+        
+        int mid = start + (end - start) / 2;
+        int count = mergeSort(arr, start, mid) + mergeSort(arr, mid + 1, end);
+        
+        // Count inversions during merge
+        count += merge(arr, start, mid, end);
+        
+        return count;
+    }
+    
+    int merge(vector<int>& arr, int start, int mid, int end) {
+        vector<int> temp(end - start + 1);
+        int i = start, j = mid + 1, k = 0;
+        int count = 0;
+        
+        while(i <= mid && j <= end) {
+            if(arr[i] <= arr[j]) {
+                temp[k++] = arr[i++];
+            } else {
+                // Count inversions: all elements from i to mid are greater than arr[j]
+                count += mid - i + 1;
+                temp[k++] = arr[j++];
+            }
+        }
+        
+        while(i <= mid) temp[k++] = arr[i++];
+        while(j <= end) temp[k++] = arr[j++];
+        
+        for(int idx = 0; idx < k; idx++) {
+            arr[start + idx] = temp[idx];
+        }
+        
+        return count;
+    }
+};
+```
+
+**Key Insights:**
+1. **Merge Sort**: Use divide and conquer approach
+2. **Inversion Counting**: Count during merge step when left > right
+3. **Bulk Counting**: When arr[i] > arr[j], count all inversions with arr[j]
+4. **Sorted Subarrays**: After sorting, inversion counting becomes efficient
+
+**Edge Cases:**
+- Array with no inversions (sorted array)
+- Array with all same elements
+- Single element array
+- Reverse sorted array (maximum inversions)
+
+**Important Notes:**
+- **Time Complexity**: O(n log n) - merge sort complexity
+- **Space Complexity**: O(n) - temporary array for merging
+- **Bulk Counting**: Count all inversions at once during merge
+- **Stable Sort**: Merge sort maintains relative order
+
+**Why Merge Sort Approach Works:**
+1. **Divide and Conquer**: Break problem into smaller subproblems
+2. **Sorted Subarrays**: After sorting, inversion counting becomes efficient
+3. **Bulk Counting**: Count all inversions with current element in one step
+4. **Recursive Solution**: Combine results from left and right halves
+
+**Variations:**
+1. **Count Reverse Pairs**: Count pairs where nums[i] > 2 * nums[j]
+2. **Count Smaller Numbers**: Count smaller numbers after each element
+3. **Minimum Swaps**: Find minimum swaps to sort array
+
+**Practice Problems:**
+- [LeetCode 315: Count of Smaller Numbers After Self](https://leetcode.com/problems/count-of-smaller-numbers-after-self/)
+- [GeeksforGeeks: Count Inversions](https://www.geeksforgeeks.org/counting-inversions/)
+
+**Interview Tips:**
+- Start with brute force for clarity
+- Explain merge sort approach step by step
+- Emphasize bulk counting during merge
+- Demonstrate inversion counting with examples
+- Discuss time and space complexity trade-offs
+
+**Algorithm Breakdown:**
+1. **Divide**: Split array into two halves
+2. **Conquer**: Recursively sort and count inversions in each half
+3. **Count**: Count inversions between left and right halves during merge
+4. **Merge**: Merge sorted halves while maintaining count
+
+**Mathematical Foundation:**
+- Inversion condition: nums[i] > nums[j] where i < j
+- Merge sort ensures sorted subarrays for efficient counting
+- Bulk counting reduces time complexity from O(n²) to O(n log n)
+
+---
+
+### Question 29: Maximum Product Subarray
+
+**Link:** [TakeUForward - Maximum Product Subarray](https://takeuforward.org/data-structure/maximum-product-subarray-in-an-array/)
+
+**Problem Statement:**
+Given an array of integers, find the maximum product of a contiguous subarray.
+
+**Example:**
+```
+Input: nums = [2,3,-2,4]
+Output: 6
+Explanation: The maximum product subarray is [2,3] with product 6.
+
+Input: nums = [-2,0,-1]
+Output: 0
+Explanation: The maximum product subarray is [0] with product 0.
+```
+
+**Intuition:**
+Track both maximum and minimum products ending at each position, as negative numbers can turn minimum into maximum.
+
+**Brute Force Approach:**
+Check all possible subarrays
+
+```cpp
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        int maxProduct = INT_MIN;
+        int n = nums.size();
+        
+        for(int i = 0; i < n; i++) {
+            int product = 1;
+            for(int j = i; j < n; j++) {
+                product *= nums[j];
+                maxProduct = max(maxProduct, product);
+            }
+        }
+        
+        return maxProduct;
+    }
+};
+```
+
+**Optimal Solution:**
+Dynamic programming with max and min tracking
+
+```cpp
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        int n = nums.size();
+        if(n == 0) return 0;
+        
+        int maxProduct = nums[0];
+        int currentMax = nums[0];
+        int currentMin = nums[0];
+        
+        for(int i = 1; i < n; i++) {
+            // Store previous values
+            int prevMax = currentMax;
+            int prevMin = currentMin;
+            
+            // Update current max and min
+            currentMax = max({nums[i], prevMax * nums[i], prevMin * nums[i]});
+            currentMin = min({nums[i], prevMax * nums[i], prevMin * nums[i]});
+            
+            // Update global maximum
+            maxProduct = max(maxProduct, currentMax);
+        }
+        
+        return maxProduct;
+    }
+};
+```
+
+**Key Insights:**
+1. **Negative Numbers**: Negative numbers can turn minimum into maximum
+2. **Zero Handling**: Reset to current number when encountering zero
+3. **Max/Min Tracking**: Track both maximum and minimum products
+4. **Dynamic Programming**: Use previous results to compute current results
+
+**Edge Cases:**
+- Array with all negative numbers
+- Array with zeros
+- Single element array
+- Array with alternating positive/negative numbers
+
+**Important Notes:**
+- **Time Complexity**: O(n) - single pass through array
+- **Space Complexity**: O(1) - constant extra space
+- **Negative Handling**: Track minimum to handle negative numbers
+- **Zero Handling**: Reset product when encountering zero
+
+**Why Dynamic Programming Approach Works:**
+1. **Optimal Substructure**: Maximum product ending at i depends on previous results
+2. **Negative Numbers**: Minimum product can become maximum with negative number
+3. **Zero Reset**: Zero resets the product chain
+4. **Single Pass**: Process array once to find maximum product
+
+**Variations:**
+1. **Maximum Sum Subarray**: Kadane's algorithm for sum
+2. **Minimum Product Subarray**: Find minimum product subarray
+3. **Product of All Subarrays**: Find product of all possible subarrays
+
+**Practice Problems:**
+- [LeetCode 152: Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray/)
+- [LeetCode 53: Maximum Subarray](https://leetcode.com/problems/maximum-subarray/)
+
+**Interview Tips:**
+- Start with brute force for clarity
+- Explain why tracking min and max is necessary
+- Demonstrate with negative numbers
+- Emphasize zero handling
+- Discuss time and space complexity trade-offs
+
+**Algorithm Breakdown:**
+1. **Initialize**: Set current max and min to first element
+2. **Iterate**: Process each element starting from second
+3. **Update**: Update current max and min using previous values
+4. **Track**: Keep track of global maximum product
+5. **Return**: Return the maximum product found
+
+**Mathematical Foundation:**
+- Product of subarray ending at i: max(nums[i], max[i-1] * nums[i], min[i-1] * nums[i])
+- Negative numbers can turn minimum into maximum
+- Zero resets the product chain
+- Dynamic programming ensures optimal solution
+
+---
+
+### Question 30: Find the Repeating and Missing Numbers
+
+**Link:** [TakeUForward - Find Repeating and Missing Numbers](https://takeuforward.org/data-structure/find-the-repeating-and-missing-numbers/)
+
+**Problem Statement:**
+Given an array of size N containing numbers from 1 to N, find the repeating and missing numbers.
+
+**Example:**
+```
+Input: arr[] = {3, 1, 2, 5, 3}
+Output: Repeating = 3, Missing = 4
+Explanation: 3 appears twice and 4 is missing.
+
+Input: arr[] = {1, 2, 2, 4}
+Output: Repeating = 2, Missing = 3
+```
+
+**Intuition:**
+Use mathematical approach with sum and sum of squares to find both numbers simultaneously.
+
+**Brute Force Approach:**
+Use hash map to count frequencies
+
+```cpp
+class Solution {
+public:
+    vector<int> findTwoElement(vector<int> arr, int n) {
+        vector<int> result(2);
+        vector<int> count(n + 1, 0);
+        
+        // Count frequencies
+        for(int i = 0; i < n; i++) {
+            count[arr[i]]++;
+        }
+        
+        // Find repeating and missing
+        for(int i = 1; i <= n; i++) {
+            if(count[i] == 0) {
+                result[1] = i; // Missing
+            } else if(count[i] == 2) {
+                result[0] = i; // Repeating
+            }
+        }
+        
+        return result;
+    }
+};
+```
+
+**Optimal Solution:**
+Mathematical approach using sum and sum of squares
+
+```cpp
+class Solution {
+public:
+    vector<int> findTwoElement(vector<int> arr, int n) {
+        vector<int> result(2);
+        
+        // Calculate sum and sum of squares
+        long long sum = 0, sumSq = 0;
+        long long expectedSum = (long long)n * (n + 1) / 2;
+        long long expectedSumSq = (long long)n * (n + 1) * (2 * n + 1) / 6;
+        
+        for(int i = 0; i < n; i++) {
+            sum += arr[i];
+            sumSq += (long long)arr[i] * arr[i];
+        }
+        
+        // Calculate differences
+        long long diff = sum - expectedSum; // repeating - missing
+        long long diffSq = sumSq - expectedSumSq; // repeating² - missing²
+        
+        // Solve equations
+        long long sumBoth = diffSq / diff; // repeating + missing
+        long long repeating = (diff + sumBoth) / 2;
+        long long missing = sumBoth - repeating;
+        
+        result[0] = (int)repeating;
+        result[1] = (int)missing;
+        
+        return result;
+    }
+};
+```
+
+**Alternative Solution:**
+Using XOR approach
+
+```cpp
+class Solution {
+public:
+    vector<int> findTwoElement(vector<int> arr, int n) {
+        vector<int> result(2);
+        
+        // XOR all numbers from 1 to n and array elements
+        int xorResult = 0;
+        for(int i = 0; i < n; i++) {
+            xorResult ^= arr[i];
+            xorResult ^= (i + 1);
+        }
+        
+        // Find rightmost set bit
+        int rightmostSetBit = xorResult & ~(xorResult - 1);
+        
+        // Separate numbers into two groups
+        int x = 0, y = 0;
+        for(int i = 0; i < n; i++) {
+            if(arr[i] & rightmostSetBit) {
+                x ^= arr[i];
+            } else {
+                y ^= arr[i];
+            }
+            
+            if((i + 1) & rightmostSetBit) {
+                x ^= (i + 1);
+            } else {
+                y ^= (i + 1);
+            }
+        }
+        
+        // Check which is repeating and which is missing
+        for(int i = 0; i < n; i++) {
+            if(arr[i] == x) {
+                result[0] = x; // Repeating
+                result[1] = y; // Missing
+                break;
+            } else if(arr[i] == y) {
+                result[0] = y; // Repeating
+                result[1] = x; // Missing
+                break;
+            }
+        }
+        
+        return result;
+    }
+};
+```
+
+**Key Insights:**
+1. **Mathematical Approach**: Use sum and sum of squares to solve equations
+2. **XOR Approach**: Use XOR properties to find both numbers
+3. **Overflow Handling**: Use long long to prevent integer overflow
+4. **Equation Solving**: Solve simultaneous equations to find both numbers
+
+**Edge Cases:**
+- Array with size 1
+- Array with all same numbers
+- Large numbers causing overflow
+- Array with no missing number
+
+**Important Notes:**
+- **Time Complexity**: O(n) - single pass through array
+- **Space Complexity**: O(1) - constant extra space
+- **Overflow Prevention**: Use long long for calculations
+- **Mathematical Formulas**: Use sum and sum of squares formulas
+
+**Why Mathematical Approach Works:**
+1. **Sum Difference**: repeating - missing = actual_sum - expected_sum
+2. **Square Sum Difference**: repeating² - missing² = actual_square_sum - expected_square_sum
+3. **Equation Solving**: Solve simultaneous equations to find both numbers
+4. **Single Pass**: Process array once to find both numbers
+
+**Variations:**
+1. **Find Single Missing Number**: Find only missing number
+2. **Find Single Repeating Number**: Find only repeating number
+3. **Find Multiple Missing Numbers**: Find multiple missing numbers
+
+**Practice Problems:**
+- [LeetCode 645: Set Mismatch](https://leetcode.com/problems/set-mismatch/)
+- [GeeksforGeeks: Find Missing and Repeating](https://www.geeksforgeeks.org/find-a-repeating-and-a-missing-number/)
+
+**Interview Tips:**
+- Start with hash map approach for clarity
+- Explain mathematical approach step by step
+- Emphasize overflow handling with long long
+- Demonstrate XOR approach as alternative
+- Discuss time and space complexity trade-offs
+
+**Algorithm Breakdown:**
+1. **Calculate Sums**: Find actual sum and sum of squares
+2. **Calculate Expected**: Find expected sum and sum of squares
+3. **Find Differences**: Calculate differences between actual and expected
+4. **Solve Equations**: Solve simultaneous equations to find both numbers
+
+**Mathematical Foundation:**
+- Expected sum: n * (n + 1) / 2
+- Expected sum of squares: n * (n + 1) * (2n + 1) / 6
+- repeating - missing = actual_sum - expected_sum
+- repeating² - missing² = actual_square_sum - expected_square_sum
+
+---
+
+### Question 31: Merge Two Sorted Arrays Without Extra Space
+
+**Link:** [TakeUForward - Merge Two Sorted Arrays](https://takeuforward.org/data-structure/merge-two-sorted-arrays-without-extra-space/)
+
+**Problem Statement:**
+Given two sorted arrays arr1[] and arr2[] of sizes n and m in non-decreasing order. Merge them in sorted order without using any extra space.
+
+**Example:**
+```
+Input: arr1[] = {1, 4, 7, 8, 10}, arr2[] = {2, 3, 9}
+Output: arr1[] = {1, 2, 3, 4, 7}, arr2[] = {8, 9, 10}
+
+Input: arr1[] = {1, 3, 5, 7}, arr2[] = {0, 2, 6, 8, 9}
+Output: arr1[] = {0, 1, 2, 3}, arr2[] = {5, 6, 7, 8, 9}
+```
+
+**Intuition:**
+Use insertion sort approach or gap method to merge arrays in-place without extra space.
+
+**Brute Force Approach:**
+Use insertion sort technique
+
+```cpp
+class Solution {
+public:
+    void merge(int arr1[], int arr2[], int n, int m) {
+        // Compare elements from end of arr1 with start of arr2
+        for(int i = n - 1; i >= 0; i--) {
+            // Find correct position for arr1[i] in arr2
+            int last = arr2[m - 1];
+            int j;
+            for(j = m - 2; j >= 0 && arr2[j] > arr1[i]; j--) {
+                arr2[j + 1] = arr2[j];
+            }
+            
+            if(j != m - 2 || last > arr1[i]) {
+                arr2[j + 1] = arr1[i];
+                arr1[i] = last;
+            }
+        }
+    }
+};
+```
+
+**Optimal Solution:**
+Gap method (Shell sort variation)
+
+```cpp
+class Solution {
+public:
+    void merge(int arr1[], int arr2[], int n, int m) {
+        int gap = (n + m + 1) / 2;
+        
+        while(gap > 0) {
+            // Compare elements in first array
+            int i = 0;
+            while(i + gap < n) {
+                if(arr1[i] > arr1[i + gap]) {
+                    swap(arr1[i], arr1[i + gap]);
+                }
+                i++;
+            }
+            
+            // Compare elements between two arrays
+            int j = gap > n ? gap - n : 0;
+            while(i < n && j < m) {
+                if(arr1[i] > arr2[j]) {
+                    swap(arr1[i], arr2[j]);
+                }
+                i++;
+                j++;
+            }
+            
+            // Compare elements in second array
+            if(j < m) {
+                j = 0;
+                while(j + gap < m) {
+                    if(arr2[j] > arr2[j + gap]) {
+                        swap(arr2[j], arr2[j + gap]);
+                    }
+                    j++;
+                }
+            }
+            
+            gap = gap == 1 ? 0 : (gap + 1) / 2;
+        }
+    }
+};
+```
+
+**Alternative Solution:**
+Using Euclidean division lemma
+
+```cpp
+class Solution {
+public:
+    void merge(int arr1[], int arr2[], int n, int m) {
+        // Use Euclidean division lemma
+        // Store all elements in arr1 using formula: arr1[i] = arr1[i] + arr2[j] * max_val
+        int max_val = 1e9 + 1;
+        
+        for(int i = 0; i < n; i++) {
+            arr1[i] = arr1[i] + arr2[i] * max_val;
+        }
+        
+        for(int i = n; i < n + m; i++) {
+            arr1[i] = arr2[i - n] + arr2[i] * max_val;
+        }
+        
+        // Sort the combined array
+        sort(arr1, arr1 + n + m);
+        
+        // Extract original elements
+        for(int i = 0; i < n; i++) {
+            arr1[i] = arr1[i] % max_val;
+        }
+        
+        for(int i = 0; i < m; i++) {
+            arr2[i] = arr1[n + i] % max_val;
+        }
+    }
+};
+```
+
+**Key Insights:**
+1. **Gap Method**: Use gap-based comparison similar to Shell sort
+2. **In-place Merging**: Merge without using extra space
+3. **Gap Reduction**: Reduce gap by half in each iteration
+4. **Three Comparisons**: Compare within arr1, between arrays, and within arr2
+
+**Edge Cases:**
+- One array is empty
+- Arrays have same size
+- All elements in one array are smaller than other
+- Arrays have same elements
+
+**Important Notes:**
+- **Time Complexity**: O((n + m) log(n + m)) - gap method
+- **Space Complexity**: O(1) - no extra space used
+- **Gap Calculation**: Start with (n + m + 1) / 2
+- **Gap Reduction**: Reduce by (gap + 1) / 2
+
+**Why Gap Method Works:**
+1. **Shell Sort Principle**: Use gap-based comparisons for efficient sorting
+2. **In-place Operation**: No extra space required
+3. **Gap Reduction**: Gradually reduce gap to achieve sorted order
+4. **Three-phase Comparison**: Handle all possible comparisons
+
+**Variations:**
+1. **Merge K Sorted Arrays**: Merge multiple sorted arrays
+2. **Merge with Extra Space**: Use extra space for simpler solution
+3. **Merge Linked Lists**: Merge sorted linked lists
+
+**Practice Problems:**
+- [LeetCode 88: Merge Sorted Array](https://leetcode.com/problems/merge-sorted-array/)
+- [GeeksforGeeks: Merge Without Extra Space](https://www.geeksforgeeks.org/merge-two-sorted-arrays-o1-extra-space/)
+
+**Interview Tips:**
+- Start with insertion sort approach for clarity
+- Explain gap method step by step
+- Emphasize in-place merging requirement
+- Demonstrate gap reduction process
+- Discuss time complexity analysis
+
+**Algorithm Breakdown:**
+1. **Initialize Gap**: Start with (n + m + 1) / 2
+2. **Compare Within Arrays**: Compare elements with gap distance
+3. **Compare Between Arrays**: Compare elements across arrays
+4. **Reduce Gap**: Reduce gap by (gap + 1) / 2
+5. **Repeat**: Continue until gap becomes 0
+
+**Mathematical Foundation:**
+- Gap method is based on Shell sort algorithm
+- Gap reduction: gap = (gap + 1) / 2
+- Time complexity: O((n + m) log(n + m))
+- Space complexity: O(1) - constant extra space
+
+---
+
+## 📊 Summary
+
+This DSA revision sheet contains **31 comprehensive problems** covering fundamental array and matrix concepts:
+
+### **Array Problems (Questions 1-17)**
+- **Basic Array Operations**: Finding largest element, second order elements, checking sorted arrays
+- **Array Manipulation**: Rotation, moving zeros, union of arrays
+- **Search & Counting**: Missing numbers, consecutive ones, single numbers
+- **Subarray Problems**: Longest subarray with sum K, subarray sum equals K
+- **Advanced Algorithms**: Two sum, Dutch National Flag, Majority Element, Kadane's Algorithm
+- **Stock Problems**: Buy and sell optimization
+- **Permutation & Sequences**: Next permutation, longest consecutive sequence in`
+
+### **Matrix & Advanced Array Problems (Questions 18-31)**
+- **Matrix Traversal**: Spiral traversal with multiple approaches
+- **Advanced Array Concepts**: Count subarray sum equals K with prefix sum
+- **Mathematical Patterns**: Pascal's triangle with combination formula
+- **Voting Algorithms**: Majority elements (n/3) using Boyer-Moore algorithm
+- **Sum Problems**: 3-Sum and 4-Sum using two pointers approach
+- **Subarray Problems**: Longest subarray with zero sum, count subarrays with XOR K
+- **Interval Problems**: Merge overlapping intervals
+- **Counting Problems**: Count reverse pairs and inversions using merge sort
+- **Product Problems**: Maximum product subarray using dynamic programming
+- **Mathematical Problems**: Find repeating and missing numbers using mathematical approach
+- **Merging Problems**: Merge sorted arrays without extra space using gap method
+
+### **Key Features:**
+✅ **Multiple Approaches**: Each problem includes brute force, better, and optimal solutions  
+✅ **Complete C++ Implementations**: Ready-to-use code for all problems  
+✅ **Time & Space Complexity**: Detailed analysis for each approach  
+✅ **Edge Cases**: Comprehensive coverage of boundary conditions  
+✅ **Interview Tips**: Practical advice for coding interviews  
+✅ **Practice Problems**: Links to related LeetCode problems  
+✅ **Mathematical Insights**: Deep understanding of algorithms  
+
+### **Problem Categories:**
+- **Easy**: Questions 1-8 (Basic array operations)
+- **Medium**: Questions 9-17 (Advanced algorithms and concepts)
+- **Hard**: Questions 18-31 (Matrix and complex array problems)
+
+### **Learning Path:**
+1. Start with basic array operations (Questions 1-8)
+2. Move to intermediate concepts (Questions 9-17)
+3. Master advanced topics (Questions 18-31)
+4. Practice variations and related problems
+
+---
+
+**Happy Coding! 🚀**
